@@ -1,6 +1,7 @@
 ; shellcode assembly
 ; nasm -f elf32 -o reverse.o reverse.asm
-; ld -m elf_i386 -o reverse reverse.o 
+; ld -m elf_i386 -o reverse reverse.o
+; objdump -d -M intel reverse.o
 
 global _start:
   section .text
