@@ -25,6 +25,24 @@ def random_eax_clear():
     print(rax_clear_array[random_element].encode('utf-8'), end="")
 
 
+def random_ebx_clear():
+    ebx_clear_array = ["\x31\xDB", "\xC1\xEB\x1F", "\xC1\xE3\x1F\x0F\xCB\x80\xEB\x80", "\x29\xDB", "\xBB\x01\x83\xEB\x01", "\xBB\xFF\xFF\xFF\xFF\x83\xC3\x01"]
+    random_element = random.randrange(0, len(ebx_clear_array))-1
+
+    print(ebx_clear_array[random_element].encode('utf-8'), end="")
+
+def random_ecx_clear():
+    ecx_clear_array = ["\x31\xC9", "\xC1\xE9\x1F", "\xC1\xE1\x1F\x0F\xC9\x80\xE9\x80", "\x29\xC9", "\xB9\x01\x83\xE9\x01", "\xB9\xFF\xFF\xFF\xFF\x83\xC1\x01"]
+    random_element = random.randrange(0, len(ecx_clear_array))-1
+
+    print(ecx_clear_array[random_element].encode('utf-8'), end="")
+
+def random_edx_clear():
+    edx_clear_array = ["\x31\xD2", "\xC1\xEA\x1F", "\xC1\xE2\x1F\x0F\xCA\x80\xEA\x80", "\x29\xD2", "\xBA\x01\x83\xEA\x01", "\xBA\xFF\xFF\xFF\xFF\x83\xC2\x01"]
+    random_element = random.randrange(0, len(edx_clear_array))-1
+
+    print(edx_clear_array[random_element].encode('utf-8'), end="")
+
 
 
 if __name__ == '__main__':
