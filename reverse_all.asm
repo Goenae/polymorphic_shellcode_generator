@@ -63,7 +63,7 @@ _start:
   ; (0 - stdin, 1 - stdout, 2 - stderr)
 
   ; let's put all this in a loop
-  shr ecx, ecx
+  shr ecx, 31
 
   DUPCOUNT:
   ; int dup2(int oldfd, int newfd);
