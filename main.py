@@ -2,7 +2,7 @@ import random
 import os
 
 def main():
-    os.system("cp template.asm ./reverse.asm")
+    os.system("cp template.asm reverse.asm")
     
     file = 'reverse.asm'
     file_o = 'reverse.o'
