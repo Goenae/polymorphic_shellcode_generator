@@ -22,25 +22,25 @@ def main():
 
 def rax (file):
     delete = '  xor rax, rax'
-    rax = ['  xor rax, rax', '  shr rax, 31', '  sub rax, rax', '  mov rax, 0xFFFFFFFF\n  add rax, 1']
+    rax = ['  xor rax, rax', '  shr rax, 63', '  sub rax, rax', '  mov rax, 0xFFFFFFFFFFFFFFFF\n  add rax, 1', '  sar rax, 63']
     new = rax
     modifier_fichier(file, delete, new)
 
 def rbx(file):
     delete = '  xor rbx, rbx'
-    rbx = ['  xor rbx, rbx', '  shr rbx, 31', '  sub rbx, rbx', '  mov rbx, 0xFFFFFFFF\n  add rbx, 1']
+    rbx = ['  xor rbx, rbx', '  shr rbx, 63', '  sub rbx, rbx', '  mov rbx, 0xFFFFFFFFFFFFFFFF\n  add rbx, 1', '  sar rbx, 63']
     new = rbx
     modifier_fichier(file, delete, new)
 
 def rcx(file):
     delete = '  xor rcx, rcx'
-    rcx = ['  xor rcx, rcx', '  shr rcx, 31', '  sub rcx, rcx', '  mov rcx, 0xFFFFFFFF\n  add rcx, 1']
+    rcx = ['  xor rcx, rcx', '  shr rcx, 63', '  sub rcx, rcx', '  mov rcx, 0xFFFFFFFFFFFFFFFF\n  add rcx, 1', '  sar rcx, 63']
     new = rcx
     modifier_fichier(file, delete, new)
 
 def rdx(file):
     delete = '  xor rdx, rdx'
-    rdx = ['  xor rdx, rdx', '  shr rdx, 31', '  sub rdx, rdx', '  mov rdx, 0xFFFFFFFF\n  add rdx, 1']
+    rdx = ['  xor rdx, rdx', '  shr rdx, 63', '  sub rdx, rdx', '  mov rdx, 0xFFFFFFFFFFFFFFFF\n  add rdx, 1', '  sar rdx, 63']
     new = rdx
     modifier_fichier(file, delete, new)
 

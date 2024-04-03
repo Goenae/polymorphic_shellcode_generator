@@ -3,6 +3,9 @@ section .text
 
 _start:
 
+        mov rax, 0x5555555555555555
+        sar rax, 63
+
         xor rax, rax
         xor rbx, rbx
         xor rcx, rcx
