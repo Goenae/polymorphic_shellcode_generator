@@ -8,16 +8,15 @@ def main():
     file = 'reverse.asm'
     file_o = 'reverse.o'
     
-    # Each function will change the lines which contains each register with "xor" instruction
-    rax(file)
-    rbx(file)
-    rcx(file)
-    rdx(file)
+    # Each loop will change the lines which contains each register with "xor" instruction
+    registers = ['rax', 'rbx', 'rcx', 'rdx']
+    for reg in registers:
+        clear_register(reg, file)
 
     # Compile and link the asm file 
     os.system("nasm -f elf64 -o %s %s && ld -o reverse %s" % (file_o, file, file_o))
 
-    # Using objdump and parsing it to have the shellcode format, it will be save in a txt file
+    # Using objdump and parsing it to have the shellcode format, it will be saved in a txt file
     commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' > result.txt'
     os.system(commande)
 
@@ -27,52 +26,19 @@ def main():
     # Print the shellcode
     print(os.system("cat result.txt"))
 
-# Each function contains the instruction to delete and an array with differents intructions that will replace the deleted one
-def rax (file):
-    delete = '  xor rax, rax'
-    rax = ['  xor rax, rax',
-           '  shr rax, 63',
-           '  sub rax, rax',
-           '  mov rax, 0xFFFFFFFFFFFFFFFF\n  add rax, 1',
-           '  sar rax, 63',
-           '  mov rax, 0x1111111111111111\n  div rax\n  dec rax',
-           '  clc\n  setc dl\n  movzx rax, dl']
-    new = rax
-    edit(file, delete, new)
-
-def rbx(file):
-    delete = '  xor rbx, rbx'
-    rbx = ['  xor rbx, rbx',
-           '  shr rbx, 63',
-           '  sub rbx, rbx',
-           '  mov rbx, 0xFFFFFFFFFFFFFFFF\n  add rbx, 1',
-           '  sar rbx, 63',
-           '  clc\n  setc dl\n  movzx rbx, dl']
-    new = rbx
-    edit(file, delete, new)
-
-def rcx(file):
-    delete = '  xor rcx, rcx'
-    rcx = ['  xor rcx, rcx',
-           '  shr rcx, 63',
-           '  sub rcx, rcx',
-           '  mov rcx, 0xFFFFFFFFFFFFFFFF\n  add rcx, 1',
-           '  sar rcx, 63',
-           '  clc\n  setc dl\n  movzx rcx, dl']
-    new = rcx
-    edit(file, delete, new)
-
-def rdx(file):
-    delete = '  xor rdx, rdx'
-    rdx = ['  xor rdx, rdx',
-           '  shr rdx, 63',
-           '  sub rdx, rdx',
-           '  mov rdx, 0xFFFFFFFFFFFFFFFF\n  add rdx, 1',
-           '  sar rdx, 63',
-           '  clc\n  setc dl\n  movzx rdx, dl']
-    new = rdx
-    edit(file, delete, new)
-
+# Replace the basic xor method by a random one for each line clearing a register in the assembly file
+def clear_register (register, file):
+    placeholder = '  xor %s, %s' % (register, register)
+    clearing_methods = ['  xor %s, %s' % (register, register),
+                        '  shr %s, 63' % register,
+                        '  sub %s, %s' % (register, register),
+                        '  mov %s, 0xFFFFFFFFFFFFFFFF\n  add %s, 1' % (register, register),
+                        '  sar %s, 63' % register,
+                        '  clc\n  setc dl\n  movzx %s, dl' % register]
+    if register == 'rax':
+        clearing_methods.append('  mov %s, 0x1111111111111111\n  div %s\n  dec %s' % (register, register, register))
+    new = clearing_methods
+    edit(file, placeholder, new)
 
 
 def edit(filename, deletedlines, newlines):
@@ -94,7 +60,7 @@ def edit(filename, deletedlines, newlines):
         with open(filename, 'w') as file:
             file.writelines(lines)
 
-        # print("Successfull edit.")
+        #print("Successfull edit.")
     except FileNotFoundError:
         print(f"'{filename}' not founded.")
     except Exception as e:

