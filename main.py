@@ -14,7 +14,7 @@ def main():
 
     os.system("nasm -f elf64 -o %s %s && ld -o reverse %s" % (file_o, file, file_o))
 
-    commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' >> result.txt'
+    commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' > result.txt'
     os.system(commande)
 
     print(os.system("cat result.txt"))
