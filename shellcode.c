@@ -1,4 +1,4 @@
-//gcc -fno-stack-protector -z execstack -m32 shellcode.c -o shellcode
+//gcc -fno-stack-protector -z execstack shellcode.c -o shellcode
 #include <stdio.h>
 #include <string.h>
 
