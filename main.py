@@ -21,6 +21,9 @@ def main():
     commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' > result.txt'
     os.system(commande)
 
+    # Print size
+    print("Shellcode length: %s" % (os.path.getsize('result.txt') // 4))
+
     # Print the shellcode
     print(os.system("cat result.txt"))
 
