@@ -54,7 +54,10 @@ def edit(filename, deletedlines, newlines):
         for index in reversed(deletedindex):
             del lines[index]
             rand = random.randint(0, len(newlines)-1)
-            lines.insert(index, newlines[rand] + '\n')
+            if rand % 2:
+                lines.insert(index, newlines[rand] + '\n')
+            else:
+                lines.insert(index, newlines[rand] + '\n  nop\n')
 
         # Writing in the file
         with open(filename, 'w') as file:
