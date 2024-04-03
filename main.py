@@ -7,10 +7,10 @@ def main():
     file = 'reverse.asm'
     file_o = 'reverse.o'
     
-    eax(file)
-    ebx(file)
-    ecx(file)
-    edx(file)
+    rax(file)
+    rbx(file)
+    rcx(file)
+    rdx(file)
 
     os.system("nasm -f elf64 -o %s %s && ld -o reverse %s" % (file_o, file, file_o))
 
