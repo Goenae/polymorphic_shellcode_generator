@@ -7,41 +7,41 @@ def main():
     file = 'reverse.asm'
     file_o = 'reverse.o'
     
-    eax(file)
-    ebx(file)
-    ecx(file)
-    edx(file)
+    rax(file)
+    rbx(file)
+    rcx(file)
+    rdx(file)
 
-    os.system("nasm -f elf32 -o reverse.o reverse.asm && ld -m elf_i386 -o reverse reverse.o")
+    os.system("nasm -f elf64 -o %s %s && ld -o reverse %s" % (file_o, file, file_o))
 
-    commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' >> result.txt'
+    commande = 'objdump -d reverse | grep "^ " | cut -f2 | awk \'{for(i=1;i<=NF;i++) printf "\\\\x%s",$i} END {print ""}\' > result.txt'
     os.system(commande)
 
     print(os.system("cat result.txt"))
 
 
-def eax (file):
-    delete = '  xor eax, eax'
-    eax = ['  xor eax, eax', '  shr eax, 31', '  sub eax, eax', '  mov eax, 0xFFFFFFFF\n  add eax, 1']
-    new = eax
+def rax (file):
+    delete = '  xor rax, rax'
+    rax = ['  xor rax, rax', '  shr rax, 63', '  sub rax, rax', '  mov rax, 0xFFFFFFFFFFFFFFFF\n  add rax, 1', '  sar rax, 63']
+    new = rax
     modifier_fichier(file, delete, new)
 
-def ebx(file):
-    delete = '  xor ebx, ebx'
-    ebx = ['  xor ebx, ebx', '  shr ebx, 31', '  sub ebx, eax', '  mov ebx, 0xFFFFFFFF\n  add ebx, 1']
-    new = ebx
+def rbx(file):
+    delete = '  xor rbx, rbx'
+    rbx = ['  xor rbx, rbx', '  shr rbx, 63', '  sub rbx, rbx', '  mov rbx, 0xFFFFFFFFFFFFFFFF\n  add rbx, 1', '  sar rbx, 63']
+    new = rbx
     modifier_fichier(file, delete, new)
 
-def ecx(file):
-    delete = '  xor ecx, ecx'
-    ecx = ['  xor ecx, ecx', '  shr ecx, 31', '  sub ecx, ecx', '  mov ecx, 0xFFFFFFFF\n  add ecx, 1']
-    new = ecx
+def rcx(file):
+    delete = '  xor rcx, rcx'
+    rcx = ['  xor rcx, rcx', '  shr rcx, 63', '  sub rcx, rcx', '  mov rcx, 0xFFFFFFFFFFFFFFFF\n  add rcx, 1', '  sar rcx, 63']
+    new = rcx
     modifier_fichier(file, delete, new)
 
-def edx(file):
-    delete = '  xor edx, edx'
-    edx = ['  xor edx, edx', '  shr edx, 31', '  sub edx, edx', '  mov edx, 0xFFFFFFFF\n  add edx, 1']
-    new = edx
+def rdx(file):
+    delete = '  xor rdx, rdx'
+    rdx = ['  xor rdx, rdx', '  shr rdx, 63', '  sub rdx, rdx', '  mov rdx, 0xFFFFFFFFFFFFFFFF\n  add rdx, 1', '  sar rdx, 63']
+    new = rdx
     modifier_fichier(file, delete, new)
 
 
